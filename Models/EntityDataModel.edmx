@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VetAdminSystemDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar(max)" Nullable="false" />
+          <Property Name="Address" Type="varchar(max)" Nullable="false" />
+          <Property Name="Phone" Type="varchar(max)" Nullable="false" />
+          <Property Name="PositionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="PatientId" />
+          </Key>
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Breed" Type="varchar(max)" Nullable="false" />
+          <Property Name="Age" Type="int" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionId" />
+          </Key>
+          <Property Name="PositionId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Employee_ToPosition">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_ToClient">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Patient">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VetAdminSystemDBModelStoreContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_ToPosition" Association="Self.FK_Employee_ToPosition">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_ToClient" Association="Self.FK_Patient_ToClient">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Patient" EntitySet="Patient" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VetAdminSystemDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_Patient_ToClient" FromRole="Client" ToRole="Patient" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Position" Relationship="Self.FK_Employee_ToPosition" FromRole="Employee" ToRole="Position" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="PatientId" />
+          </Key>
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Breed" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Age" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Patient_ToClient" FromRole="Patient" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionId" />
+          </Key>
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employee_ToPosition" FromRole="Position" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Patient_ToClient">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Patient">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_ToPosition">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VetAdminSystemDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Patients" EntityType="Self.Patient" />
+          <EntitySet Name="Positions" EntityType="Self.Position" />
+          <AssociationSet Name="FK_Patient_ToClient" Association="Self.FK_Patient_ToClient">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Patient" EntitySet="Patients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_ToPosition" Association="Self.FK_Employee_ToPosition">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VetAdminSystemDBModelStoreContainer" CdmEntityContainer="VetAdminSystemDBEntities">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Patient">
+              <MappingFragment StoreEntitySet="Patient">
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Breed" ColumnName="Breed" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Position">
+              <MappingFragment StoreEntitySet="Position">
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
