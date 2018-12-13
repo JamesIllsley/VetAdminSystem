@@ -11,6 +11,8 @@
         <EntityTypeShape EntityType="VetAdminSystemDBModel.Position" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <AssociationConnector Association="VetAdminSystemDBModel.FK_Patient_ToClient" ManuallyRouted="false" />
         <AssociationConnector Association="VetAdminSystemDBModel.FK_Employee_ToPosition" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="VetAdminSystemDBModel.Shift" Width="1.5" PointX="5.25" PointY="1.125" />
+        <AssociationConnector Association="VetAdminSystemDBModel.EmployeeID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

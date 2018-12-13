@@ -29,5 +29,6 @@ namespace VetAdminSystem.Models
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Patient> Patients { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
+        public virtual DbSet<Shift> Shifts { get; set; }
     }
 }
