@@ -22,7 +22,12 @@ namespace VetAdminSystem.Models
     public class PatientMetaData
     {
         [DisplayName("Patient Name")]
+        [Required(ErrorMessage = "Name is a required field. If Unknown, please type Unknown")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Breed is a required field. If Unknown, please type Unknown")]
+        public string Breed { get; set; }
+        [Required(ErrorMessage = "Age is a required field. If Unknown, please enter 0")]
+        public Nullable<int> Age { get; set; }
     }
 
     public partial class ClientMetaData
