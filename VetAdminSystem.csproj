@@ -299,9 +299,7 @@
     <Content Include="Views\Clients\Index.cshtml" />
     <Content Include="Views\Patients\PatientSearch.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Schedule\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
