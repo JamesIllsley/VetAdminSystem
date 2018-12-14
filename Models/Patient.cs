@@ -11,7 +11,9 @@ namespace VetAdminSystem.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Patient
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +21,7 @@ namespace VetAdminSystem.Models
         {
             this.Perscriptions = new HashSet<Perscription>();
         }
-    
+        
         public int PatientId { get; set; }
         public int ClientId { get; set; }
         public string Name { get; set; }
