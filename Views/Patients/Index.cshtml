@@ -9,6 +9,13 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>Search by: @Html.DropDownList("SearchByList") @Html.TextBox("SearchString")
+        <button type="submit">Search!</button></p>
+}
+
 <table class="table">
     <tr>
         <th>

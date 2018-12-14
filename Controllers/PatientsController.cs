@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using VetAdminSystem.Models;
@@ -15,9 +16,70 @@ namespace VetAdminSystem.Controllers
         private VetAdminSystemDBEntities1 db = new VetAdminSystemDBEntities1();
 
         // GET: Patients
-        public ActionResult Index()
+        public ActionResult Index(string SearchByList, string searchString)
         {
             var patients = db.Patients.Include(p => p.Client);
+            ViewBag.SearchByList = new SelectList(Common.UsefulMethods.GetModelProperties<Patient>());
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (SearchByList == "Client")
+                {
+                    patients = patients.Where(p => p.Client.Name == searchString);
+                }
+
+                if (SearchByList == "ClientId")
+                {
+                    if (Int32.TryParse(searchString, out int x))
+                    {
+                        patients = patients.Where(p => p.ClientId == x);
+                    }
+                    else
+                    {
+                        patients = patients.Where(p => p.ClientId < 0);
+                    }
+                }
+
+                if (SearchByList == "Age")
+                {
+                    if (Int32.TryParse(searchString, out int x))
+                    {
+                        patients = patients.Where(p => p.Age == x);
+                    }
+                    else
+                    {
+                        patients = patients.Where(p => p.Age < 0);
+                    }
+                }
+
+                if (SearchByList == "Breed")
+                {
+                    patients = patients.Where(p => p.Breed == searchString);
+                }
+
+                if (SearchByList == "Name")
+                {
+                    patients = patients.Where(p => p.Name == searchString);
+                }
+
+                if (SearchByList == "PatientId")
+                {
+                    if (Int32.TryParse(searchString, out int x))
+                    {
+                        patients = patients.Where(p => p.PatientId == x);
+                    }
+                    else
+                    {
+                        patients = patients.Where(p => p.PatientId < 0);
+                    }
+                }
+
+                if (SearchByList == "Perscription")
+                {
+                    patients = patients.Where(p => p.Perscriptions.Where(pers => pers.Medication.Name == searchString).Count() > 0);
+                }
+            }
+
             return View(patients.ToList());
         }
 
