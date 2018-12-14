@@ -13,6 +13,15 @@
         <AssociationConnector Association="VetAdminSystemDBModel.FK_Employee_ToPosition" ManuallyRouted="false" />
         <EntityTypeShape EntityType="VetAdminSystemDBModel.Shift" Width="1.5" PointX="5.25" PointY="1.125" />
         <AssociationConnector Association="VetAdminSystemDBModel.EmployeeID" />
+        <EntityTypeShape EntityType="VetAdminSystemDBModel.Medication" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="VetAdminSystemDBModel.Perscription" Width="1.5" PointX="5.25" PointY="7.875" />
+        <EntityTypeShape EntityType="VetAdminSystemDBModel.Unit" Width="1.5" PointX="0.75" PointY="9.25" />
+        <EntityTypeShape EntityType="VetAdminSystemDBModel.Visit" Width="1.5" PointX="5.25" PointY="3.875" />
+        <AssociationConnector Association="VetAdminSystemDBModel.FK_Visit_ToTable_1" />
+        <AssociationConnector Association="VetAdminSystemDBModel.FK_Visit_ToTable" />
+        <AssociationConnector Association="VetAdminSystemDBModel.FK_Medication_ToTable" />
+        <AssociationConnector Association="VetAdminSystemDBModel.FK_Perscription_ToTable" />
+        <AssociationConnector Association="VetAdminSystemDBModel.FK_Perscription_ToTable_1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

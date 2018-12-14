@@ -18,6 +18,7 @@ namespace VetAdminSystem.Models
         public Employee()
         {
             this.Shifts = new HashSet<Shift>();
+            this.Visits = new HashSet<Visit>();
         }
     
         public int EmployeeId { get; set; }
@@ -29,5 +30,7 @@ namespace VetAdminSystem.Models
         public virtual Position Position { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Shift> Shifts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visit> Visits { get; set; }
     }
 }

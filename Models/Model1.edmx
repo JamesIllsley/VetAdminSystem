@@ -24,6 +24,16 @@
           <Property Name="Phone" Type="varchar(max)" Nullable="false" />
           <Property Name="PositionId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Medication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Amount" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Quantity" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Uname" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Patient">
           <Key>
             <PropertyRef Name="PatientId" />
@@ -33,6 +43,16 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Breed" Type="varchar(max)" Nullable="false" />
           <Property Name="Age" Type="int" />
+        </EntityType>
+        <EntityType Name="Perscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="PetId" Type="int" Nullable="false" />
+          <Property Name="MedicationId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Direction" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Position">
           <Key>
@@ -49,6 +69,23 @@
           <Property Name="StartTime" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="EndTime" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="EId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Units">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UnitName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Diagnosis" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <Association Name="EmployeeID">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
@@ -74,6 +111,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Medication_ToTable">
+          <End Role="Units" Type="Self.Units" Multiplicity="1" />
+          <End Role="Medication" Type="Self.Medication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Units">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medication">
+              <PropertyRef Name="Uname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Patient_ToClient">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
@@ -86,12 +135,64 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Perscription_ToTable">
+          <End Role="Medication" Type="Self.Medication" Multiplicity="1" />
+          <End Role="Perscription" Type="Self.Perscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Perscription">
+              <PropertyRef Name="MedicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perscription_ToTable_1">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="Perscription" Type="Self.Perscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="Perscription">
+              <PropertyRef Name="PetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_ToTable">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_ToTable_1">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="VetAdminSystemDBModelStoreContainer">
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medication" EntityType="Self.Medication" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Perscription" EntityType="Self.Perscription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shift" EntityType="Self.Shift" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Units" EntityType="Self.Units" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visit" EntityType="Self.Visit" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="EmployeeID" Association="Self.EmployeeID">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Shift" EntitySet="Shift" />
@@ -100,9 +201,29 @@
             <End Role="Position" EntitySet="Position" />
             <End Role="Employee" EntitySet="Employee" />
           </AssociationSet>
+          <AssociationSet Name="FK_Medication_ToTable" Association="Self.FK_Medication_ToTable">
+            <End Role="Units" EntitySet="Units" />
+            <End Role="Medication" EntitySet="Medication" />
+          </AssociationSet>
           <AssociationSet Name="FK_Patient_ToClient" Association="Self.FK_Patient_ToClient">
             <End Role="Client" EntitySet="Client" />
             <End Role="Patient" EntitySet="Patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perscription_ToTable" Association="Self.FK_Perscription_ToTable">
+            <End Role="Medication" EntitySet="Medication" />
+            <End Role="Perscription" EntitySet="Perscription" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perscription_ToTable_1" Association="Self.FK_Perscription_ToTable_1">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="Perscription" EntitySet="Perscription" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_ToTable" Association="Self.FK_Visit_ToTable">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Visit" EntitySet="Visit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_ToTable_1" Association="Self.FK_Visit_ToTable_1">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Visit" EntitySet="Visit" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -118,6 +239,7 @@
           <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Patients" Relationship="Self.FK_Patient_ToClient" FromRole="Client" ToRole="Patient" />
+          <NavigationProperty Name="Visits" Relationship="VetAdminSystemDBModel.FK_Visit_ToTable_1" FromRole="Client" ToRole="Visit" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -130,6 +252,7 @@
           <Property Name="PositionId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Position" Relationship="Self.FK_Employee_ToPosition" FromRole="Employee" ToRole="Position" />
           <NavigationProperty Name="Shifts" Relationship="VetAdminSystemDBModel.EmployeeID" FromRole="Employee" ToRole="Shift" />
+          <NavigationProperty Name="Visits" Relationship="VetAdminSystemDBModel.FK_Visit_ToTable" FromRole="Employee" ToRole="Visit" />
         </EntityType>
         <EntityType Name="Patient">
           <Key>
@@ -141,6 +264,7 @@
           <Property Name="Breed" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Age" Type="Int32" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Patient_ToClient" FromRole="Patient" ToRole="Client" />
+          <NavigationProperty Name="Perscriptions" Relationship="VetAdminSystemDBModel.FK_Perscription_ToTable_1" FromRole="Patient" ToRole="Perscription" />
         </EntityType>
         <EntityType Name="Position">
           <Key>
@@ -192,6 +316,30 @@
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Shift" EntitySet="Shifts" />
           </AssociationSet>
+          <EntitySet Name="Medications" EntityType="VetAdminSystemDBModel.Medication" />
+          <EntitySet Name="Perscriptions" EntityType="VetAdminSystemDBModel.Perscription" />
+          <EntitySet Name="Units" EntityType="VetAdminSystemDBModel.Unit" />
+          <EntitySet Name="Visits" EntityType="VetAdminSystemDBModel.Visit" />
+          <AssociationSet Name="FK_Visit_ToTable_1" Association="VetAdminSystemDBModel.FK_Visit_ToTable_1">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Visit" EntitySet="Visits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_ToTable" Association="VetAdminSystemDBModel.FK_Visit_ToTable">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Visit" EntitySet="Visits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medication_ToTable" Association="VetAdminSystemDBModel.FK_Medication_ToTable">
+            <End Role="Unit" EntitySet="Units" />
+            <End Role="Medication" EntitySet="Medications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perscription_ToTable" Association="VetAdminSystemDBModel.FK_Perscription_ToTable">
+            <End Role="Medication" EntitySet="Medications" />
+            <End Role="Perscription" EntitySet="Perscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perscription_ToTable_1" Association="VetAdminSystemDBModel.FK_Perscription_ToTable_1">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Perscription" EntitySet="Perscriptions" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Shift">
           <Key>
@@ -212,6 +360,110 @@
             </Principal>
             <Dependent Role="Shift">
               <PropertyRef Name="EId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Medication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Quantity" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Uname" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Unit" Relationship="VetAdminSystemDBModel.FK_Medication_ToTable" FromRole="Medication" ToRole="Unit" />
+          <NavigationProperty Name="Perscriptions" Relationship="VetAdminSystemDBModel.FK_Perscription_ToTable" FromRole="Medication" ToRole="Perscription" />
+        </EntityType>
+        <EntityType Name="Perscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="PetId" Type="Int32" Nullable="false" />
+          <Property Name="MedicationId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Direction" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Medication" Relationship="VetAdminSystemDBModel.FK_Perscription_ToTable" FromRole="Perscription" ToRole="Medication" />
+          <NavigationProperty Name="Patient" Relationship="VetAdminSystemDBModel.FK_Perscription_ToTable_1" FromRole="Perscription" ToRole="Patient" />
+        </EntityType>
+        <EntityType Name="Unit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UnitName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Medications" Relationship="VetAdminSystemDBModel.FK_Medication_ToTable" FromRole="Unit" ToRole="Medication" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Diagnosis" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Client" Relationship="VetAdminSystemDBModel.FK_Visit_ToTable_1" FromRole="Visit" ToRole="Client" />
+          <NavigationProperty Name="Employee" Relationship="VetAdminSystemDBModel.FK_Visit_ToTable" FromRole="Visit" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Visit_ToTable_1">
+          <End Type="VetAdminSystemDBModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="VetAdminSystemDBModel.Visit" Role="Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_ToTable">
+          <End Type="VetAdminSystemDBModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="VetAdminSystemDBModel.Visit" Role="Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medication_ToTable">
+          <End Type="VetAdminSystemDBModel.Unit" Role="Unit" Multiplicity="1" />
+          <End Type="VetAdminSystemDBModel.Medication" Role="Medication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medication">
+              <PropertyRef Name="Uname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perscription_ToTable">
+          <End Type="VetAdminSystemDBModel.Medication" Role="Medication" Multiplicity="1" />
+          <End Type="VetAdminSystemDBModel.Perscription" Role="Perscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Perscription">
+              <PropertyRef Name="MedicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perscription_ToTable_1">
+          <End Type="VetAdminSystemDBModel.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="VetAdminSystemDBModel.Perscription" Role="Perscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="Perscription">
+              <PropertyRef Name="PetId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -267,6 +519,47 @@
                 <ScalarProperty Name="EId" ColumnName="EId" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medications">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Medication">
+              <MappingFragment StoreEntitySet="Medication">
+                <ScalarProperty Name="Uname" ColumnName="Uname" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Perscriptions">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Perscription">
+              <MappingFragment StoreEntitySet="Perscription">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MedicationId" ColumnName="MedicationId" />
+                <ScalarProperty Name="PetId" ColumnName="PetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Units">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Unit">
+              <MappingFragment StoreEntitySet="Units">
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visits">
+            <EntityTypeMapping TypeName="VetAdminSystemDBModel.Visit">
+              <MappingFragment StoreEntitySet="Visit">
+                <ScalarProperty Name="Diagnosis" ColumnName="Diagnosis" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -14,6 +14,12 @@ namespace VetAdminSystem.Models
     
     public partial class Patient
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Patient()
+        {
+            this.Perscriptions = new HashSet<Perscription>();
+        }
+    
         public int PatientId { get; set; }
         public int ClientId { get; set; }
         public string Name { get; set; }
@@ -21,5 +27,7 @@ namespace VetAdminSystem.Models
         public Nullable<int> Age { get; set; }
     
         public virtual Client Client { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Perscription> Perscriptions { get; set; }
     }
 }

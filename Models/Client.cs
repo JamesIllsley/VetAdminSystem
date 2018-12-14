@@ -18,6 +18,7 @@ namespace VetAdminSystem.Models
         public Client()
         {
             this.Patients = new HashSet<Patient>();
+            this.Visits = new HashSet<Visit>();
         }
     
         public int ClientId { get; set; }
@@ -27,5 +28,7 @@ namespace VetAdminSystem.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patient> Patients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visit> Visits { get; set; }
     }
 }
