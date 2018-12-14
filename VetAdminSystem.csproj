@@ -152,6 +152,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MedicationsController.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
+    <Compile Include="Controllers\PerscriptionsController.cs" />
     <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -298,6 +299,8 @@
     <Content Include="Views\Clients\Edit.cshtml" />
     <Content Include="Views\Clients\Index.cshtml" />
     <Content Include="Views\Patients\PatientSearch.cshtml" />
+    <Content Include="Views\Perscriptions\Create.cshtml" />
+    <Content Include="Views\Perscriptions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
